@@ -2,7 +2,7 @@ def specify_board_state():
     board_state = dict()
     board_state['board_shape'] = 'linear'
     board_state['go_position'] = 0
-    board_state['go_increment'] = 200
+    board_state['go_increment'] = 0
     # taken from https://en.wikipedia.org/wiki/Template:Monopoly_board_layout also saved in local
     board_state['location_sequence'] = ['Go','Mediterranean Avenue', 'Community Chest',
                 'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental Avenue',
@@ -39,8 +39,8 @@ def _specify_action_state():
                            , 'roll_die', 'concluded_actions', 'make_sell_property_offer']
     ans['post_die_roll'] = ['mortgage_property', 'buy_property', 'sell_property',
                             'sell_house_hotel', 'concluded_actions'] # treat auction as a special case
-    ans['out_of_turn'] = ['bid_on_property','free_mortgage','sell_property','sell_house_hotel','accept_sell_property_offer',
-                          'make_sell_property_offer','skip_turn', 'concluded_actions']
+    ans['out_of_turn'] = ['free_mortgage','sell_property','sell_house_hotel','accept_sell_property_offer',
+                          'make_sell_property_offer','skip_turn', 'concluded_actions', 'mortgage_property', 'improve_property']
 
     return ans
 
@@ -50,8 +50,8 @@ def _specify_player_state(num_board_positions):
     ans['player_count'] = count
     # ans['player_states'] = list()
     inner_dict = {'player_name':['player_1','player_2','player_3','player_4'],
-                  'starting_cash': 1500,
-                  'current_cash': 1500,
+                  'starting_cash': 15000,
+                  'current_cash': 15000,
                   'current_position':list(range(0,num_board_positions)),
                   'status': ['waiting_for_move', 'current_move', 'won', 'lost'],
                   'assets': ['Mediterranean Avenue',

@@ -1,7 +1,14 @@
+"""
+Use this file for testing all kinds of random hypotheses. Do NOT use it for unit testing or diagnostics code;
+we provide facilities for these in diagnostics.py and testing.py
+"""
+
+
 from location import *
 import json
 import sys
 from action_choices import skip_turn
+import bank
 
 # print 10%10
 # game_schema_path = '/Users/mayankkejriwal/git-projects/GNOME/'
@@ -35,3 +42,6 @@ class Test(object):
 
 g = Test()
 print g.test_method(1,2)
+
+k = bank.Bank()
+print 'bank.Bank' in str(type(k))

@@ -41,7 +41,7 @@ class Bank(object):
         else:
             print current_gameboard['players'][bidding_player_index].player_name,' will place the first bid'
 
-        while len(players_out_of_auction) < len(current_gameboard['players'])-1: # we iterate and bid while at least 2 players remain
+        while len(players_out_of_auction) < len(current_gameboard['players'])-1: # we iterate and bid till just one player remains
             bidding_player = current_gameboard['players'][bidding_player_index]
             if bidding_player in players_out_of_auction:
                 bidding_player_index = (bidding_player_index+1)%len(current_gameboard['players']) # next player
@@ -49,11 +49,24 @@ class Bank(object):
             proposed_bid = bidding_player.make_bid(bidding_player, current_gameboard,
                                 asset, current_bid) # make_bid automatically passes in the player as the first argument
                                                     # since it is a non-static function assignment
+            # add to game history
+            current_gameboard['history']['function'].append(bidding_player.make_bid)
+            params = dict()
+            params['player'] = bidding_player
+            params['current_gameboard'] = current_gameboard
+            params['asset'] = asset
+            params['current_bid'] = current_bid
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(proposed_bid)
+
             print bidding_player.player_name,' proposed bid ',str(proposed_bid)
 
             if proposed_bid == 0:
-                pass
-            elif proposed_bid < current_bid: # the <= serves as a forcing function to ensure the proposed bid must be non-zero
+                players_out_of_auction.add(bidding_player)
+                print bidding_player.player_name, ' is out of the auction.'
+                bidding_player_index = (bidding_player_index + 1) % len(current_gameboard['players'])
+                continue
+            elif proposed_bid <= current_bid: # the <= serves as a forcing function to ensure the proposed bid must be non-zero
                 players_out_of_auction.add(bidding_player)
                 print bidding_player.player_name, ' is out of the auction.'
                 bidding_player_index = (bidding_player_index + 1) % len(current_gameboard['players'])
@@ -64,9 +77,26 @@ class Bank(object):
             winning_player = bidding_player
             bidding_player_index = (bidding_player_index + 1) % len(current_gameboard['players'])
 
+
         if winning_player:
-            winning_player.current_cash -= current_bid # if it got here then current_bid is non-zero.
+            winning_player.charge_player(current_bid) # if it got here then current_bid is non-zero.
+            # add to game history
+            current_gameboard['history']['function'].append(winning_player.charge_player)
+            params = dict()
+            params['self'] = winning_player
+            params['amount'] = current_bid
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
+
             asset.update_asset_owner(winning_player, current_gameboard)
+            # add to game history
+            current_gameboard['history']['function'].append(asset.update_asset_owner)
+            params = dict()
+            params['self'] = asset
+            params['player'] = winning_player
+            params['current_gameboard'] = current_gameboard
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
         else:
             print 'Auction did not succeed in a sale.'
         return

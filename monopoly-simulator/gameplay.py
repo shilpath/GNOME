@@ -3,7 +3,7 @@ from action_choices import roll_die
 import numpy as np
 from card_utility_actions import move_player_after_die_roll
 import background_agent_v1
-import simple_decision_agent_1
+# import simple_decision_agent_1
 import json
 import diagnostics
 
@@ -19,6 +19,10 @@ def simulate_game_instance(game_elements, np_seed=4):
     np.random.shuffle(game_elements['players'])
     game_elements['seed'] = np_seed
     game_elements['choice_function'] = np.random.choice
+    randstate1 = np.random.RandomState(seed=np_seed)
+    randstate2 = np.random.RandomState(seed=np_seed)
+    game_elements['chance_choice_function'] = randstate1.choice
+    game_elements['cc_choice_function'] = randstate2.choice
     num_die_rolls = 0
     # game_elements['go_increment'] = 100 # we should not be modifying this here. It is only for testing purposes.
     # One reason to modify go_increment is if your decision agent is not aggressively trying to monopolize. Since go_increment

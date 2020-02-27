@@ -6,9 +6,10 @@ import background_agent_v1
 # import simple_decision_agent_1
 import json
 import diagnostics
+import sys
+#sys.stdout = open('new_logs_191.txt','wt')
 
-
-def simulate_game_instance(game_elements, np_seed=4):
+def simulate_game_instance(game_elements, np_seed=19):
     """
     Simulate a game instance.
     :param game_elements: The dict output by set_up_board
@@ -181,6 +182,7 @@ def set_up_board(game_schema_file_path, player_decision_agents):
 # this is where everything begins. Assign decision agents to your players, set up the board and start simulating! You can
 # control any number of players you like, and assign the rest to the simple agent. We plan to release a more sophisticated
 # but still relatively simple agent soon.
+
 player_decision_agents = dict()
 # for p in ['player_1','player_3']:
 #     player_decision_agents[p] = simple_decision_agent_1.decision_agent_methods
@@ -188,7 +190,7 @@ player_decision_agents['player_1'] = background_agent_v1.decision_agent_methods
 player_decision_agents['player_2'] = background_agent_v1.decision_agent_methods
 player_decision_agents['player_3'] = background_agent_v1.decision_agent_methods
 player_decision_agents['player_4'] = background_agent_v1.decision_agent_methods
-game_elements = set_up_board('/Users/mayankkejriwal/git-projects/GNOME/monopoly_game_schema_v1-2.json',
+game_elements = set_up_board('../monopoly_game_schema_v1-2.json',
                              player_decision_agents)
 simulate_game_instance(game_elements)
 
